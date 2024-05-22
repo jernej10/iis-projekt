@@ -22,7 +22,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install  poetry 
+          pip install dvc[s3]
 
+      - name: DVC setup
+        run: |
+          dvc remote modify origin --local access_key_id ${{ secrets.DVC_ACCESS_KEY_ID }}
+          dvc remote modify origin --local secret_access_key ${{ secrets.DVC_SECRET_ACCESS_KEY }}
+          dvc pull -r origin
 
       - name: Install dependencies
         run: |
@@ -35,12 +41,14 @@ jobs:
 
       - name: Commit and push data
         run: |
+          dvc add data
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
           git pull
           git diff-index --quiet HEAD || (git commit -a -m "action: fetch latest data" --allow-empty)
           git push
+          dvc push -r origin
 
   process:
     runs-on: ubuntu-latest
@@ -56,6 +64,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install  poetry 
+          pip install dvc[s3]
+
+      - name: DVC setup
+        run: |
+          dvc remote modify origin --local access_key_id ${{ secrets.DVC_ACCESS_KEY_ID }}
+          dvc remote modify origin --local secret_access_key ${{ secrets.DVC_SECRET_ACCESS_KEY }}
+          dvc pull -r origin
 
       - name: Pull data
         run: |
@@ -74,9 +89,11 @@ jobs:
 
       - name: Commit and push data
         run: |
+          dvc add data
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
           git pull
           git diff-index --quiet HEAD || (git commit -a -m "action: fetch latest data" --allow-empty)
           git push
+          dvc push -r origin
