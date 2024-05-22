@@ -12,8 +12,15 @@ scikit-learn = "^1.5.0"
 fastapi = "^0.111.0"
 uvicorn = "^0.29.0"
 pytest = "^8.2.1"
+yfinance = "^0.2.40"
 
+
+[tool.poetry.group.dev.dependencies]
+poethepoet = "^0.26.1"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poe.tasks]
+fetch-data = "python3 -m src.data.fetch_data"
