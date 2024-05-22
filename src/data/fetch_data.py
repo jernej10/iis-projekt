@@ -23,7 +23,7 @@ def save_data(data: pd.DataFrame, directory: str, filename: str) -> None:
 
 def main():
     df = fetch_stock_data("^GSPC", "1d", "1d")
-    save_data(df, "../../data/raw/stock", "sp500")
+    save_data(df, "data/raw/stock", "sp500")
 
 
 if __name__ == "__main__":
