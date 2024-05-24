@@ -13,10 +13,14 @@ fastapi = "^0.111.0"
 uvicorn = "^0.29.0"
 pytest = "^8.2.1"
 yfinance = "^0.2.40"
+great-expectations = "0.18.13"
+evidently = "^0.4.25"
 
 
 [tool.poetry.group.dev.dependencies]
 poethepoet = "^0.26.1"
+black = "^24.4.2"
+jupyter = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -25,3 +29,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poe.tasks]
 fetch-data = "python3 -m src.data.fetch_data"
 process-data = "python3 -m src.data.process_data"
+validate = "python3 -m src.data.run_checkpoint"
+data_drift = "python3 -m src.data.data_drift"
+stability_tests = "python3 -m src.data.stability_tests"
+ks_test = "python3 -m src.data.ks"
