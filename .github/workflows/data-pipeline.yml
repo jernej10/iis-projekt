@@ -134,6 +134,10 @@ jobs:
         run: |
           cp data/processed/stock/sp500.csv data/current_data.csv
 
+      - name: Run validation
+        run: |
+          poetry run poe validate
+
       - name: Run Data Drift
         run: |
           poetry run poe data_drift

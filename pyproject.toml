@@ -42,7 +42,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poe.tasks]
 fetch-data = "python3 -m src.data.fetch_data"
 process-data = "python3 -m src.data.process_data"
-validate = "python3 -m src.data.run_checkpoint"
+validate = "python3 -m src.data.validate"
 data_drift = "python3 -m src.data.data_drift"
 stability_tests = "python3 -m src.data.stability_tests"
 ks_test = "python3 -m src.data.ks"
