@@ -3,6 +3,9 @@ import pandas as pd
 
 
 def ks_test(sample1, sample2):
+    sample1 = sample1.dropna()
+    sample2 = sample2.dropna()
+
     if np.array_equal(sample1, sample2):
         # If the samples are equal, return trivial valuesx
         return 0.0, 1.0
