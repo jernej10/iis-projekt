@@ -23,6 +23,8 @@ dagshub = "^0.3.27"
 tf-keras = "^2.16.0"
 skl2onnx = "^1.16.0"
 onnxruntime = "^1.18.0"
+pydantic = "^2.7.1"
+pydantic-settings = "^2.2.1"
 
 [tool.poetry.group.win-dev.dependencies]
 tensorflow-intel = "^2.16.1"
@@ -46,3 +48,4 @@ stability_tests = "python3 -m src.data.stability_tests"
 ks_test = "python3 -m src.data.ks"
 split_data = "python3 -m src.data.split_data"
 train = "python3 -m src.models.train_model"
+predict = "python3 -m src.models.predict_model"

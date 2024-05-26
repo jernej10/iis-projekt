@@ -23,8 +23,8 @@ def prepare_and_train_model() -> None:
     # fill missing values with average values
     dataset.fillna(dataset.mean(), inplace=True)
 
-    n_estimators = 100
-    min_samples_split = 100
+    n_estimators = 200
+    min_samples_split = 50
     random_state = 1
 
     predictors = ["Close", "Volume", "Open", "High", "Low"]

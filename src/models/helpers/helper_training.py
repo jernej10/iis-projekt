@@ -6,7 +6,8 @@ import pandas as pd
 from keras import Sequential
 from keras.layers import Dense, GRU, Dropout, Input
 from keras.src.layers import LSTM
-from sklearn.metrics import mean_squared_error, mean_absolute_error, explained_variance_score
+from sklearn.metrics import mean_squared_error, mean_absolute_error, explained_variance_score, accuracy_score, \
+    precision_score, recall_score, f1_score
 from sklearn.preprocessing import MinMaxScaler
 from typing import Tuple
 import tensorflow_model_optimization as tfmot
@@ -54,18 +55,18 @@ def train_model(X_train: np.ndarray, y_train: np.ndarray, X_test: np.ndarray, y_
     return model
 
 
-def evaluate_model_performance(y_true, y_pred, dataset, scaler):
-    y_true_copy = np.repeat(y_true, dataset.shape[1], axis=-1)
-    y_true = scaler.inverse_transform(np.reshape(y_true_copy, (len(y_true), dataset.shape[1])))[:, 0]
-
-    prediction_copy = np.repeat(y_pred, dataset.shape[1], axis=-1)
-    prediction = scaler.inverse_transform(np.reshape(prediction_copy, (len(y_pred), dataset.shape[1])))[:, 0]
-
-    mse = mean_squared_error(y_true, prediction)
-    mae = mean_absolute_error(y_true, prediction)
-    evs = explained_variance_score(y_true, prediction)
-
+def evaluate_model_performance(y_true, y_pred):
+    mse = mean_squared_error(y_true, y_pred)
+    mae = mean_absolute_error(y_true, y_pred)
+    evs = explained_variance_score(y_true, y_pred)
     return mse, mae, evs
+
+def evaluate_model_performance_classification(y_true, y_pred):
+    accuracy = accuracy_score(y_true, y_pred)
+    precision = precision_score(y_true, y_pred, average='weighted')
+    recall = recall_score(y_true, y_pred, average='weighted')
+    f1 = f1_score(y_true, y_pred, average='weighted')
+    return accuracy, precision, recall, f1
 
 
 def save_model(model, scaler: MinMaxScaler, model_name: str, scaler_name: str, folder_name: str) -> None:

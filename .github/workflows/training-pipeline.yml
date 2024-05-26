@@ -48,6 +48,12 @@ jobs:
         run: |
           poetry run poe train
 
+      - name: Predict
+        env:
+          DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
+        run: |
+          poetry run poe predict
+
       - name: Commit and push data
         run: |
           dvc add data
