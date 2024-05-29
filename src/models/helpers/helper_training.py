@@ -68,6 +68,12 @@ def evaluate_model_performance_classification(y_true, y_pred):
     f1 = f1_score(y_true, y_pred, average='weighted')
     return accuracy, precision, recall, f1
 
+def evaluate_model_performance_regression(y_true, y_pred):
+    mse = mean_squared_error(y_true, y_pred)
+    mae = mean_absolute_error(y_true, y_pred)
+    evs = explained_variance_score(y_true, y_pred)
+    return mse, mae, evs
+
 
 def save_model(model, scaler: MinMaxScaler, model_name: str, scaler_name: str, folder_name: str) -> None:
     #older_name = f"../../models/station_{station_number}"

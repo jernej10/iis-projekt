@@ -2,6 +2,7 @@
   text-align: center;
   background-color: #282c34;
   min-height: 100vh;
+  padding: 0px 0px 50px 0px;
 }
 
 .App-header {
@@ -38,13 +39,11 @@
 .prediction-container.up {
   background-color: green;
   color: #155715;
-  box-shadow: 0 0 20px 5px rgba(0, 255, 0, 0.7);
 }
 
 .prediction-container.down {
   background-color: #f82c2c;
   color: #7e0b0b;
-  box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.7);
 }
 
 .arrow {
@@ -80,4 +79,8 @@
 
 .text-white {
   color: #ffffff;
+}
+
+.margin{
+  margin-bottom: 20px;
 }

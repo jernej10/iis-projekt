@@ -82,9 +82,9 @@ def download_model(model_name: str, model_type: ModelType) -> str | None:
     if model is None:
         return None
 
-    onnx.save_model(model, f"{folder_name}/model.onnx")
+    onnx.save_model(model, f"{folder_name}/{model_name}.onnx")
     print(f"{model_type_str.capitalize()} model for {model_name} has been downloaded.")
-    model_path = f"{folder_name}/model.onnx"
+    model_path = f"{folder_name}/{model_name}.onnx"
 
     return model_path
 
