@@ -53,40 +53,34 @@ async def predict():
     if not all(col in df.columns for col in predictors):
         return {"error": "Fetched data does not contain the required columns"}
 
-    # Dodaj stolpec za ciljni atribut in nastavi vrednosti na 0
     df = df.assign(Target=0)
 
     print(df.head())
 
-    # Pripravi podatke za napovedovanje
     X_test = df[predictors]
     X_test.columns = [f'f{i}' for i in range(X_test.shape[1])]
 
 
-    # Naloži model za napovedovanje
     production_model_path = download_model("sp500_model", ModelType.PRODUCTION)
     model = ort.InferenceSession("../../models/sp500/sp500_model_production.onnx")
 
-    # Preverite ime vhodne in izhodne spremenljivke modela
     input_name = model.get_inputs()[0].name
-    output_name = model.get_outputs()[0].name
+    output_name = model.get_outputs()[1].name
 
     try:
-        # Napoveduj ciljni atribut
         predictions = model.run([output_name], {input_name: X_test.values.astype(np.float32)})[0]
+        predicted_classes = [1 if prediction[1] > 0.6 else 0 for prediction in predictions]
     except Exception as e:
         return {"error": str(e)}
 
-    # Pretvori rezultate napovedi v seznam
-    prediction_result = predictions.tolist()
+    prediction_result = predicted_classes
 
-    # Shranite vhodne podatke in rezultate napovedi v MongoDB
+    # Save to MongoDB
     document = {
         "timestamp": datetime.now().isoformat(),
         "input_data": df[predictors].to_dict(orient="records"),
         "predictions": prediction_result
     }
-    # Predpostavimo, da imamo že inicializirano povezavo z MongoDB
     collection.insert_one(document)
 
     return {"prediction": prediction_result}
