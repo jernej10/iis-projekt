@@ -91,7 +91,7 @@ function Home() {
   return (
     <div className="App">
       <header className="App-header">
-        <p>Predicting S&P 500 stock price for tomorrow using machine learning</p>
+        <p>Predicting sp500 stock price 📈</p>
         <Link className="App-link" to="/dashboard">
           Dashboard
         </Link>
@@ -102,8 +102,8 @@ function Home() {
       {!loadingRegression && !error && (
         <h2 className="price">{predictionRegression}$</h2>
       )}
-      <div className="container">
-        {loading && <p className="text-white">Loading prediction will price go up tomorrow...</p>}
+      <div className="flex justify-center items-center h-[40vh]">
+      {loading && <p className="text-white">Loading prediction will price go up tomorrow...</p>}
         {error && <p>Error: {error.message}</p>}
         {!loading && !error && (
           <div
@@ -122,8 +122,8 @@ function Home() {
       {loadingHistorical && <p className="text-white">Loading historical prices...</p>}
       {errorHistorical && <p>Error: {error.message}</p>}
       {!loadingHistorical && !errorHistorical && (
-          <div className="container margin-bottom">
-            <Line data={chartData} />
+          <div className="flex justify-center items-center h-[40vh] mb-12">
+          <Line data={chartData} />
           </div>
       )}
     </div>
