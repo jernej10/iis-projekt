@@ -1,0 +1,49 @@
+name: Validate Predictions
+on:
+  schedule:
+    - cron: '0 0 * * 0' # This triggers the workflow at midnight every Sunday
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  validate_predictions:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Poetry
+        run: pipx install poetry
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+          cache: poetry
+
+      - name: Install dependencies
+        run: |
+          poetry install --with dev --without win-dev
+
+      - name: Install DVC
+        uses: iterative/setup-dvc@v1
+
+      - name: Configure DVC
+        run: |
+          dvc remote modify origin --local access_key_id ${{ secrets.DVC_ACCESS_KEY_ID }}
+          dvc remote modify origin --local secret_access_key ${{ secrets.DVC_SECRET_ACCESS_KEY }}
+
+      - name: DVC pull
+        run: |
+          dvc pull -r origin
+
+      - name: Run validation
+        env:
+          DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+        run: |
+          poetry run poe evaluate_production
