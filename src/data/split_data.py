@@ -4,7 +4,7 @@ import pandas as pd
 def split_data():
     current_data = pd.read_csv('data/current_data.csv')
 
-    test_size = int(0.1 * len(current_data))
+    test_size = int(0.05 * len(current_data))
 
     test_data = current_data.tail(test_size)
     train_data = current_data.iloc[:-test_size]

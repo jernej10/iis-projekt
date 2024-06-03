@@ -82,9 +82,9 @@ def download_model(model_name: str, model_type: ModelType) -> str | None:
     if model is None:
         return None
 
-    onnx.save_model(model, f"{folder_name}/{model_name}.onnx")
+    onnx.save_model(model, f"{folder_name}/{model_name}_{model_type.name.lower()}.onnx")
     print(f"{model_type_str.capitalize()} model for {model_name} has been downloaded.")
-    model_path = f"{folder_name}/{model_name}.onnx"
+    model_path = f"{folder_name}/{model_name}_{model_type}.onnx"
 
     return model_path
 
@@ -95,7 +95,9 @@ def empty_model_registry():
     mlflow.set_tracking_uri('https://dagshub.com/jernej10/iis-projekt.mlflow')
 
     client = MlflowClient()
-    for i in range(1, 30):
-        model_name = f"sp500_model_{i}"
-        client.delete_registered_model(model_name)
-        client.delete_registered_model(f"{model_name}_scaler")
+
+    model_name_cls = f"sp500_model"
+    client.delete_registered_model(model_name_cls)
+
+    model_name_reg = f"sp500_model_regression"
+    client.delete_registered_model(model_name_reg)
