@@ -59,8 +59,8 @@ def main():
     db = client.get_database("db")
     collection = db.get_collection("validation-results")
 
-    reference_data = read_data('../../data/reference_data.csv')
-    current_data = read_data('../../data/current_data.csv')
+    reference_data = read_data('data/reference_data.csv')
+    current_data = read_data('data/current_data.csv')
     result = validate(reference_data, current_data)
 
     # Add timestamp to the result
