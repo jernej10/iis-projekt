@@ -9,6 +9,8 @@ import dagshub
 from dagshub.data_engine.datasources import mlflow
 import dagshub.auth as dh_auth
 
+from src.data.helpers.send_email import send_email
+
 load_dotenv()
 
 # MongoDB connection setup
@@ -91,7 +93,7 @@ def main():
 
     if accuracy < 0.5:
         print("Model is not performing well")
-        # TODO - Send email to alert the team
+        send_email(f"Model in production is not performing well. Accuracy is: {accuracy:.2f}!")
 
     print(f"Accuracy: {accuracy:.2f}")
     print(f"Precision: {precision:.2f}")

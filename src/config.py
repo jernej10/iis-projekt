@@ -5,6 +5,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     DAGSHUB_TOKEN: str
     MONGO_URI: str
+    GMAIL_PASSWORD: str
+    GMAIL: str
 
     __project_root = pathlib.Path(__file__).resolve().parent.parent
 
