@@ -8,6 +8,9 @@ on:
 permissions:
   contents: write
 
+env:
+  MONGO_URI: ${{ secrets.MONGO_URI }}
+
 jobs:
   fetch:
     runs-on: ubuntu-latest
