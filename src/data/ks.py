@@ -25,7 +25,8 @@ if __name__ == "__main__":
     current_data = pd.read_csv("data/current_data.csv")
     reference_data = pd.read_csv("data/reference_data.csv")
 
-    alpha = 0.1
+    #alpha = 0.1
+    alpha = 0.0
 
     for column in current_data.columns:
         d, p_value = ks_test(current_data[column], reference_data[column])
