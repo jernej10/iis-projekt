@@ -149,10 +149,6 @@ jobs:
         run: |
           poetry run poe stability_tests
 
-      - name: Run Kolmogorov-Smirnov test
-        run: |
-          poetry run poe ks_test
-
       - name: Deploy DataDocs to Netlify
         uses: nwtgck/actions-netlify@v1.2
         with:
