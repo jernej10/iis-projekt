@@ -3,14 +3,14 @@ name: Deploy Pipeline Service
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - 'src/serve/**'
       - '.github/workflows/service-ci-cd.yml'
       - 'Dockerfile'
   pull_request:
     branches:
-      - main
+      - master
     paths:
       - 'src/serve/**'
       - '.github/workflows/service-ci-cd.yml'
