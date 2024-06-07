@@ -7,14 +7,12 @@ on:
     paths:
       - 'src/client/**'
       - '.github/workflows/client-ci-cd.yml'
-      - 'Dockerfile'
   pull_request:
     branches:
       - master
     paths:
       - 'src/client/**'
       - '.github/workflows/client-ci-cd.yml'
-      - 'Dockerfile'
   workflow_dispatch:
 
 jobs:
@@ -40,6 +38,6 @@ jobs:
         run: bash <(curl -fsSL cli.new)
 
       - name: Deploy to Railway
-        run: railway up --service client
+        run: railway up --service client-sp500
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
