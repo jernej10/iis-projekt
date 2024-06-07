@@ -52,9 +52,9 @@ function Dashboard() {
       try {
         const response = await axios.get('https://api-production-fb8c.up.railway.app/metrics-history');
         const data = response.data;
-        const METRICS_TO_SHOW = 5;
-        data.classification = data.classification.slice(-METRICS_TO_SHOW);
-        data.regression = data.regression.slice(-METRICS_TO_SHOW);
+        const METRICS_TO_SHOW = 4;
+        data.classification = data.classification.slice(0, METRICS_TO_SHOW);
+        data.regression = data.regression.slice(0, METRICS_TO_SHOW);
         setMetrics(data);
       } catch (error) {
         console.error('Error fetching metrics:', error);
