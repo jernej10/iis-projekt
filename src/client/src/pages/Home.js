@@ -39,7 +39,7 @@ function Home() {
   useEffect(() => {
     const fetchPredictionWillGoUp = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/predict');
+        const response = await axios.get('https://api-production-fb8c.up.railway.app/predict');
         setPrediction(response.data.prediction[0]);
       } catch (error) {
         setError(error);
@@ -50,7 +50,7 @@ function Home() {
 
     const fetchPredictionPrice = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/predict/regression');
+        const response = await axios.get('https://api-production-fb8c.up.railway.app/predict/regression');
         setPredictionRegression(response.data.prediction[0]);
       } catch (error) {
         setErrorRegression(error);
@@ -61,7 +61,7 @@ function Home() {
 
     const fetchHistoricalPrices = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/historical-prices');
+        const response = await axios.get('https://api-production-fb8c.up.railway.app/historical-prices');
         setHistoricalPrices(response.data.prices);
       } catch (error) {
         setErrorHistorical(error);

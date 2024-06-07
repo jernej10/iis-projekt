@@ -39,7 +39,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchValidationResult = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/latest-validation-result');
+        const response = await axios.get('https://api-production-fb8c.up.railway.app/latest-validation-result');
         setValidationResult(response.data);
       } catch (error) {
         console.error('Error fetching validation result:', error);
@@ -50,7 +50,7 @@ function Dashboard() {
 
     const fetchMetrics = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/metrics-history');
+        const response = await axios.get('https://api-production-fb8c.up.railway.app/metrics-history');
         const data = response.data;
         const METRICS_TO_SHOW = 5;
         data.classification = data.classification.slice(-METRICS_TO_SHOW);
@@ -65,7 +65,7 @@ function Dashboard() {
 
     const fetchMetricLimit = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/metric-limit/latest');
+        const response = await axios.get('https://api-production-fb8c.up.railway.app/metric-limit/latest');
         console.log(response.data.latest_metric_limit)
         setMetricLimit(parseFloat(response.data.latest_metric_limit.value));
       } catch (error) {
@@ -77,7 +77,7 @@ function Dashboard() {
 
     const fetchProductionMetrics = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/production-metrics-history');
+        const response = await axios.get('https://api-production-fb8c.up.railway.app/production-metrics-history');
         setClassificationMetrics(response.data.classification);
       } catch (error) {
         console.error('Error fetching production metrics:', error);
@@ -97,7 +97,7 @@ function Dashboard() {
   const handleMetricLimitSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8000/metric-limit', { value: parseFloat(metricLimit) });
+      await axios.post('https://api-production-fb8c.up.railway.app/metric-limit', { value: parseFloat(metricLimit) });
       alert('Metric limit updated successfully!');
       setMetricLimit(metricLimit)
     } catch (error) {
