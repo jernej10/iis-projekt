@@ -5,10 +5,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import onnxruntime as ort
 import yfinance as yf
+from pydantic import BaseModel
+
 from src.models.helpers.model_registry import download_model, ModelType
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from datetime import datetime
+from fastapi.staticfiles import StaticFiles
+
+from src.serve.experiments import get_metrics_history, get_production_metrics_history
 
 load_dotenv()
 app = FastAPI()
@@ -29,6 +34,7 @@ client = MongoClient(MONGO_URI)
 db = client.get_database("db")
 collection = db.get_collection("predictions")
 validation_results_collection = db.get_collection("validation-results")
+metric_limit_collection = db.get_collection("metric-limit")
 
 def fetch_stock_data(ticker: str, period: str, interval: str) -> pd.DataFrame:
     data = yf.Ticker(ticker)
@@ -36,6 +42,34 @@ def fetch_stock_data(ticker: str, period: str, interval: str) -> pd.DataFrame:
     data.reset_index(inplace=True)  # Resetiranje indeksa
 
     return data
+
+# Mount the /img directory to serve static files
+# TODO fix url for production
+app.mount("/img", StaticFiles(directory="src/serve/img"), name="img")
+
+class MetricLimit(BaseModel):
+    value: float
+
+@app.post("/metric-limit")
+async def create_metric_limit(metric_limit: MetricLimit):
+    try:
+        metric_limit_collection.insert_one(metric_limit.dict())
+        return {"message": "Metric limit added successfully"}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.get("/metric-limit/latest")
+async def get_latest_metric_limit():
+    try:
+        latest_metric_limit = metric_limit_collection.find().sort("_id", -1).limit(1)
+        latest_metric_limit = list(latest_metric_limit)
+        if latest_metric_limit:
+            latest_metric_limit[0]["_id"] = str(latest_metric_limit[0]["_id"])
+            return {"latest_metric_limit": latest_metric_limit[0]}
+        else:
+            return {"message": "No metric limit found"}
+    except Exception as e:
+        return {"error": str(e)}
 
 @app.get("/predict")
 async def predict():
@@ -151,6 +185,14 @@ async def get_latest_validation_result():
     if result:
         result["_id"] = str(result["_id"])
     return result
+
+@app.get("/metrics-history")
+async def metrics():
+    return get_metrics_history()
+
+@app.get("/production-metrics-history")
+async def production_metrics():
+    return get_production_metrics_history()
 
 @app.get("/")
 def root():
