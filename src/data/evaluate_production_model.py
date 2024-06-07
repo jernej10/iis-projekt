@@ -18,13 +18,12 @@ MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
 client = MongoClient(MONGO_URI)
 db = client.get_database("db")
 collection = db.get_collection("predictions")
-
+metric_limit_collection = db.get_collection("metric-limit")
 
 def fetch_stock_data(ticker: str, period: str, interval: str) -> pd.DataFrame:
     sp500 = yf.Ticker(ticker)
     sp500 = sp500.history(period=period, interval=interval)
     return sp500
-
 
 def get_predictions():
     documents = collection.find()
@@ -34,6 +33,12 @@ def get_predictions():
         results.append(document)
     return results
 
+def get_latest_metric_limit():
+    result = metric_limit_collection.find_one(sort=[("_id", -1)])
+    if result and "value" in result:
+        return result["value"]
+    else:
+        raise ValueError("No metric limit found in the database.")
 
 def main():
     dh_auth.add_app_token(token=os.getenv("DAGSHUB_TOKEN"))
@@ -78,12 +83,14 @@ def main():
     y_pred = merged_df['predictions']
 
     # Start mlflow run
-    mlflow.start_run(run_name="Production model evaluation")
+
 
     accuracy = accuracy_score(y_true, y_pred)
     precision = precision_score(y_true, y_pred, zero_division=0)
     recall = recall_score(y_true, y_pred, zero_division=0)
     f1 = f1_score(y_true, y_pred, zero_division=0)
+    ''' 
+    mlflow.start_run(run_name="Production model evaluation")
 
     # Log metrics to mlflow
     mlflow.log_metric("accuracy", accuracy)
@@ -91,10 +98,14 @@ def main():
     mlflow.log_metric("recall", recall)
     mlflow.log_metric("f1", f1)
 
-    if accuracy < 0.5:
-        print("Model is not performing well")
-        send_email(f"Model in production is not performing well. Accuracy is: {accuracy:.2f}!")
-
+    try:
+        limit_value = get_latest_metric_limit()
+        if accuracy < limit_value:
+            print("Model is not performing well")
+            send_email(f"Model in production is not performing well. Accuracy is: {accuracy:.2f}!")
+    except ValueError as e:
+        print(f"Error fetching metric limit: {e}")
+'''
     print(f"Accuracy: {accuracy:.2f}")
     print(f"Precision: {precision:.2f}")
     print(f"Recall: {recall:.2f}")
@@ -102,7 +113,6 @@ def main():
 
     # End mlflow run
     mlflow.end_run()
-
 
 if __name__ == "__main__":
     main()
