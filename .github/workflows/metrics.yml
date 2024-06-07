@@ -7,6 +7,12 @@ on:
 permissions:
   contents: write
 
+env:
+  MONGO_URI: ${{ secrets.MONGO_URI }}
+  DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
+  GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+  GMAIL: ${{ secrets.GMAIL }}
+
 jobs:
   validate_predictions:
     runs-on: ubuntu-latest
@@ -42,8 +48,6 @@ jobs:
           dvc pull -r origin
 
       - name: Run validation
-        env:
-          DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
-          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+
         run: |
           poetry run poe evaluate_production
