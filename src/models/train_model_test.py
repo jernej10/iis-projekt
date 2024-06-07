@@ -1,4 +1,7 @@
 import os
+
+import shap
+from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
 import onnxmltools
 import mlflow
@@ -88,6 +91,27 @@ def prepare_and_train_model(file: str):
     model_cls = train_classification_model(X_train_cls, y_train_cls)
     model_reg = train_regression_model(X_train_reg, y_train_reg)
 
+    # TODO shap & fix path for saving
+
+    # Calculate SHAP values for the regression model
+    ''' 
+    explainer_reg = shap.Explainer(model_reg)
+    shap_values_reg = explainer_reg(X_train_reg, check_additivity=False)
+    shap.plots.beeswarm(shap_values_reg, show=False)
+
+    os.makedirs("../serve/img", exist_ok=True)
+
+    plt.savefig("../serve/img/beeswarm_regression.png")
+    plt.close()
+
+    # Calculate SHAP values for the classification model
+    explainer_cls = shap.Explainer(model_cls)
+    shap_values_cls = explainer_cls(X_train_cls, check_additivity=False)
+    shap.plots.beeswarm(shap_values_cls, show=False)
+
+    plt.savefig("../serve/img/beeswarm_classification.png")
+    plt.close()
+    '''
     onnx_model_cls = convert_to_onnx(model_cls, len(predictors_cls))
     onnx_model_reg = convert_to_onnx(model_reg, len(predictors_reg))
 

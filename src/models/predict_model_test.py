@@ -70,12 +70,13 @@ def evaluate_classification(model_name: str, test_file: str):
     print(f"F1: {f1}")
 
     # Log metrics to MLflow
-    mlflow.start_run(run_name=f"Prediction for {model_name}", nested=True)
+    '''
+    mlflow.start_run(run_name=f"Prediction for {model_name}", nested=True, experiment_id="1")
     mlflow.log_metric("accuracy", accuracy)
     mlflow.log_metric("precision", precision)
     mlflow.log_metric("recall", recall)
     mlflow.log_metric("f1", f1)
-
+    '''
     # Get production model performance
     production_model = ort.InferenceSession("models/sp500/sp500_model_production.onnx")
     production_model_predictions = production_model.run([production_model.get_outputs()[1].name], {input_name: X_test.values.astype(np.float32)})[0]
@@ -107,11 +108,9 @@ def evaluate_regression(model_name: str, test_file: str):
     input_name = latest_model.get_inputs()[0].name
     label_name_regression = latest_model.get_outputs()[0].name
 
-    latest_model_predictions = \
-    latest_model.run([label_name_regression], {input_name: X_test.values.astype(np.float32)})[0]
+    latest_model_predictions = latest_model.run([label_name_regression], {input_name: X_test.values.astype(np.float32)})[0]
     print(latest_model_predictions)
-    mse, mae, evs = evaluate_model_performance_regression(y_test.values[-len(latest_model_predictions):],
-                                                          latest_model_predictions)
+    mse, mae, evs = evaluate_model_performance_regression(y_test.values, latest_model_predictions)
 
     print(f"Regression metrics for {model_name}:")
     print(f"MSE: {mse}")
@@ -119,10 +118,12 @@ def evaluate_regression(model_name: str, test_file: str):
     print(f"EVS: {evs}")
 
     # Log metrics to MLflow
-    mlflow.start_run(run_name=f"Prediction for {model_name}", nested=True)
+    '''
+    mlflow.start_run(run_name=f"Prediction for {model_name}", nested=True, experiment_id="3")
     mlflow.log_metric("mse", mse)
     mlflow.log_metric("mae", mae)
     mlflow.log_metric("evs", evs)
+    '''
 
     # Get production model performance
     production_model = ort.InferenceSession("models/sp500/sp500_model_regression_production.onnx")
