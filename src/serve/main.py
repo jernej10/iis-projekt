@@ -96,7 +96,7 @@ async def predict():
 
 
     production_model_path = download_model("sp500_model", ModelType.PRODUCTION)
-    model = ort.InferenceSession("../../models/sp500/sp500_model_production.onnx")
+    model = ort.InferenceSession("models/sp500/sp500_model_production.onnx")
 
     input_name = model.get_inputs()[0].name
     output_name = model.get_outputs()[1].name
@@ -149,7 +149,7 @@ async def predict_regression():
     production_model_path = download_model("sp500_model_regression", ModelType.PRODUCTION)
 
     # Load the trained model
-    model = ort.InferenceSession("../../models/sp500/sp500_model_regression_production.onnx")
+    model = ort.InferenceSession("models/sp500/sp500_model_regression_production.onnx")
 
     # Check the model input name
     input_name = model.get_inputs()[0].name
