@@ -7,12 +7,14 @@ on:
     paths:
       - 'src/client/**'
       - '.github/workflows/client-ci-cd.yml'
+      - 'Dockerfile'
   pull_request:
     branches:
       - master
     paths:
       - 'src/client/**'
       - '.github/workflows/client-ci-cd.yml'
+      - 'Dockerfile'
   workflow_dispatch:
 
 jobs:
