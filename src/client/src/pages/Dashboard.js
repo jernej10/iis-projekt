@@ -233,11 +233,11 @@ function Dashboard() {
           <div>
             <h1 className="font-bold text-2xl my-4">Interpretability of models 📊</h1>
             <h2 className="font-bold text-xl mt-4 mb-2">Regression</h2>
-            <img src="http://127.0.0.1:8000/img/beeswarm_regression.png" alt="Regression" style={{ maxWidth: '100%', maxHeight: '300px' }} />
+            <img src="https://api-production-fb8c.up.railway.app/img/beeswarm_regression.png" alt="Regression" style={{ maxWidth: '100%', maxHeight: '300px' }} />
           </div>
           <div>
             <h2 className="font-bold text-xl mt-4 mb-2">Classification</h2>
-            <img src="http://127.0.0.1:8000/img/beeswarm_classification.png" alt="Classification" style={{ maxWidth: '100%', maxHeight: '300px' }} />
+            <img src="https://api-production-fb8c.up.railway.app/img/beeswarm_classification.png" alt="Classification" style={{ maxWidth: '100%', maxHeight: '300px' }} />
           </div>
           <div className="mt-4">
             <h2 className="font-bold mb-2">💡 Legend:</h2>
